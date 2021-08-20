@@ -12,7 +12,7 @@ import {
 import "antd/dist/antd.css";
 import "./App.css";
 import Axios from "axios";
-import SizeChart from "./Barchart";
+import SizeChart from "./components/Barchart";
 
 const { Title } = Typography;
 function App() {
@@ -32,7 +32,6 @@ function App() {
         `http://localhost:5000/search?s=${searchTerm.toLowerCase()}`
       );
 
-      console.log(data);
       if (!data.error) {
         setMetadata(data);
         setError("");
@@ -49,7 +48,6 @@ function App() {
   const onClose = e => {};
   const { data } = metadata;
 
-  console.log("error", error);
   const antIcon = <Icon type="loading" style={{ fontSize: 24 }} spin />;
 
   return (
