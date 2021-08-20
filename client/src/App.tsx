@@ -20,11 +20,11 @@ function App() {
   const [searchTerm, setSearchTerm] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState("");
-  const handleChange = e => {
+  const handleChange = (e: { currentTarget: { value: React.SetStateAction<string>; }; }) => {
     return setSearchTerm(e.currentTarget.value);
   };
 
-  const handleSubmit = async e => {
+  const handleSubmit = async (e: { preventDefault: () => void; }) => {
     e.preventDefault();
     setIsLoading(true);
     try {
@@ -45,7 +45,7 @@ function App() {
     }
   };
 
-  const onClose = e => {};
+  const onClose = (e: any) => {};
   const { data } = metadata;
 
   const antIcon = <Icon type="loading" style={{ fontSize: 24 }} spin />;
@@ -59,7 +59,7 @@ function App() {
       >
         <Col span={12} offset={6}>
           <Title>Cost of Bundles</Title>
-          <Title level={4} style={{ fontWeight: "300", paddingBottom: "18px" }}>
+          <Title level={4} style={{ fontWeight: 300, paddingBottom: "18px" }}>
             find the cost of adding a npm package to your bundle
           </Title>
           <form onSubmit={handleSubmit}>
@@ -72,7 +72,7 @@ function App() {
                 padding: "35px 35px 35px 30px",
                 textAlign: "center",
                 fontSize: "2rem",
-                fontWeight: "400"
+                fontWeight: 400
               }}
             />
           </form>
@@ -105,7 +105,6 @@ function App() {
 
 function Stats({ metadata }) {
   const { meta, sizes } = metadata;
-  console.log(sizes);
   return (
     <>
       <Title>{meta.name}</Title>
