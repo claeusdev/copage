@@ -11,7 +11,7 @@ import {
 } from "antd";
 import "antd/dist/antd.css";
 import "./App.css";
-import Axios from "axios";
+import Axios, {AxiosResponse} from "axios";
 import SizeChart from "./components/Barchart";
 
 export interface Size {
@@ -21,19 +21,18 @@ export interface Size {
   minified: number
   gzipped: number
 }
-export interface Respone {
-  data: {
-    meta: {
-      description: string;
-      name: string;
-      distTag:{};
-      versiona: string[]
-    }
-  }
+export interface PackageData {
+  meta: {
+    description: string;
+    name: string;
+    distTag:{};
+    versiona: string[]
+  },
+  sizes: Size[]
 }
 const { Title } = Typography;
 function App() {
-  const [metadata, setMetadata] = useState<any>({});
+  const [data, setData] = useState<PackageData>();
   const [searchTerm, setSearchTerm] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState("");
@@ -45,14 +44,12 @@ function App() {
     e.preventDefault();
     setIsLoading(true);
     try {
-      const data = await Axios.get(
+      const resp: AxiosResponse = await Axios.get(
         `http://localhost:5000/search?s=${searchTerm.toLowerCase()}`
       );
 
-      console.log({data})
-
-      if (data) {
-        setMetadata(data);
+      if (resp.data) {
+        setData(resp.data);
         setError("");
         return setIsLoading(false);
       } else {
@@ -65,7 +62,7 @@ function App() {
   };
 
   const onClose = (e: any) => {};
-  const { data } = metadata;
+  // const { data } = metadata;
 
   const antIcon = <Icon type="loading" style={{ fontSize: 24 }} spin />;
 
@@ -110,7 +107,7 @@ function App() {
                 />
               ) : (
                 <Row style={{ margin: "30px" }}>
-                  <Col span={12}>{data && <Stats metadata={data} />}</Col>
+                  <Col span={12}>{data && <Stats {...data} />}</Col>
                   <Col span={12}>{data && <SizeChart chartData={data} />}</Col>
                 </Row>
               )}
@@ -122,11 +119,10 @@ function App() {
   );
 }
 
-function Stats({ metadata }: any) {
-  const { meta, sizes } = metadata;
+const Stats: React.FC<PackageData> = ({ meta, sizes }: PackageData)=> {
   return (
     <>
-      <Title>{meta.name}</Title>
+      {meta ? <><Title>{meta.name}</Title>
       <p>{meta.description}</p>
       <Row>
         <Col span={8}>
@@ -138,7 +134,8 @@ function Stats({ metadata }: any) {
         <Col span={8}>
           <Statistic title="GZIPPED" value={`${sizes[2].gzipped / 1000}kB`} />
         </Col>
-      </Row>
+      </Row></> : null}
+      
     </>
   );
 }

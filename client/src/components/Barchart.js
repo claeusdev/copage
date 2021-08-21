@@ -5,11 +5,13 @@ export default class SizeChart extends PureComponent {
   static jsfiddleUrl = "https://jsfiddle.net/alidingling/90v76x08/";
 
   render() {
+    const {chartData} = this.props
     return (
-      <BarChart
+      <>
+      {chartData ? <BarChart
         width={500}
         height={300}
-        data={this.props.chartData.sizes}
+        data={chartData.sizes}
         margin={{
           top: 20,
           right: 30,
@@ -23,7 +25,8 @@ export default class SizeChart extends PureComponent {
         <Legend />
         <Bar dataKey="minified" stackId="a" fill="#8884d8" />
         <Bar dataKey="gzipped" stackId="a" fill="#82ca9d" />
-      </BarChart>
+      </BarChart> : null}
+      </>
     );
   }
 }
