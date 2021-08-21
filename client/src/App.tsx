@@ -14,9 +14,26 @@ import "./App.css";
 import Axios from "axios";
 import SizeChart from "./components/Barchart";
 
+export interface Size {
+  name: string
+  versionedName: string
+  size: number
+  minified: number
+  gzipped: number
+}
+export interface Respone {
+  data: {
+    meta: {
+      description: string;
+      name: string;
+      distTag:{};
+      versiona: string[]
+    }
+  }
+}
 const { Title } = Typography;
 function App() {
-  const [metadata, setMetadata] = useState({});
+  const [metadata, setMetadata] = useState<any>({});
   const [searchTerm, setSearchTerm] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState("");
@@ -32,7 +49,9 @@ function App() {
         `http://localhost:5000/search?s=${searchTerm.toLowerCase()}`
       );
 
-      if (!data.error) {
+      console.log({data})
+
+      if (data) {
         setMetadata(data);
         setError("");
         return setIsLoading(false);
@@ -103,7 +122,7 @@ function App() {
   );
 }
 
-function Stats({ metadata }) {
+function Stats({ metadata }: any) {
   const { meta, sizes } = metadata;
   return (
     <>
