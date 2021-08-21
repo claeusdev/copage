@@ -18,9 +18,9 @@ import { PackageData } from "../../interfaces";
 const { Title } = Typography;
 function App() {
   const [data, setData] = useState<PackageData>();
-  const [searchTerm, setSearchTerm] = useState("");
-  const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState("");
+  const [searchTerm, setSearchTerm] = useState<string>("");
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [error, setError] = useState<string>("");
   const handleChange = (e: {
     currentTarget: { value: React.SetStateAction<string> };
   }) => {
@@ -31,6 +31,8 @@ function App() {
     e.preventDefault();
     setIsLoading(true);
     try {
+      if(searchTerm === "") return;
+
       const resp: AxiosResponse = await Axios.get(
         `http://localhost:5000/search?s=${searchTerm.toLowerCase()}`
       );
